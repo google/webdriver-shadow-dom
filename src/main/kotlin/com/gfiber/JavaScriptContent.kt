@@ -1,13 +1,15 @@
 package com.gfiber
 
-class JavaScriptContent {
-    val gfiberWindow = """
+internal class JavaScriptContent {
+
+    companion object {
+        val gfiberWindow = """
                             if(!window.gfiber) {
                                 window.gfiber = {}
                             }
                         """.trimIndent()
 
-    val byshadowcss = """
+        val byshadowcss = """
                         /**
                          * @fileoverview By locator to search the shadow dom with a css selector.
                          */
@@ -55,9 +57,6 @@ class JavaScriptContent {
                 
                               const elementsWithShadowRoots =
                                   Array.from(target.querySelectorAll('*'))
-                                      .filter(
-                                          (element) => !skipTags.some(
-                                              tag => tag === element.tagName.toLocaleLowerCase()))
                                       .filter((element) => !!element.shadowRoot);
                 
                               for (const element of elementsWithShadowRoots) {
@@ -77,7 +76,7 @@ class JavaScriptContent {
                         }
                     """.trimIndent()
 
-    val byshadowcssclosest = """
+        val byshadowcssclosest = """
                                 /**
                                  * @fileoverview Provides shadowRoot helpers.
                                  */
@@ -100,7 +99,7 @@ class JavaScriptContent {
                                 }
                             """.trimIndent()
 
-    val byshadowcssmatchingregex = """
+        val byshadowcssmatchingregex = """
                                     /**
                                      * @fileoverview  By locator to search the shadow dom using a regex for text
                                      * content.
@@ -207,7 +206,7 @@ class JavaScriptContent {
                                     }
                                 """.trimIndent()
 
-    val byshadowcssroot = """      
+        val byshadowcssroot = """      
                             /**
                              * @fileoverview By locator to search the shadowRoot.
                              */
@@ -226,5 +225,6 @@ class JavaScriptContent {
                     
                             }
                         """.trimIndent()
+    }
 
 }

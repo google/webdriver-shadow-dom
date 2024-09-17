@@ -1,11 +1,14 @@
 package com.gfiber
 
-import org.openqa.selenium.By
-import org.openqa.selenium.JavascriptExecutor
-import org.openqa.selenium.SearchContext
-import org.openqa.selenium.WebElement
+import org.openqa.selenium.*
 import org.openqa.selenium.remote.RemoteWebElement
+import org.openqa.selenium.support.ui.ExpectedCondition
 import java.io.IOException
+import kotlin.Any
+import kotlin.IllegalArgumentException
+import kotlin.NoSuchElementException
+import kotlin.String
+
 
 /** Base class for all custom shadow dom locators.  */
 abstract class ByShadowBase : By() {
@@ -22,15 +25,7 @@ abstract class ByShadowBase : By() {
     override fun findElements(context: SearchContext): List<WebElement> {
         try {
             val js: JavascriptExecutor = getExecutor(context)
-            //  sequence of code matters
-            val jsContent = JavaScriptContent()
-            js.executeScript(jsContent.gfiberWindow)
-            js.executeScript(jsContent.byshadowcss)
-            js.executeScript(jsContent.byshadowcssclosest)
-            js.executeScript(jsContent.byshadowcssmatchingregex)
-            js.executeScript(jsContent.byshadowcssroot)
-            println("JS INJECTED")
-
+            injectShadowLocatorScripts(js)
             return if (context is WebElement) {
                 handleFindElements(context, context)
             } else {
@@ -43,6 +38,16 @@ abstract class ByShadowBase : By() {
     }
 
     companion object {
+
+        @JvmStatic
+        fun injectShadowLocatorScripts(executor: JavascriptExecutor) {
+            // The gfiberWindow code line execute first
+            executor.executeScript(JavaScriptContent.gfiberWindow)
+            executor.executeScript(JavaScriptContent.byshadowcss)
+            executor.executeScript(JavaScriptContent.byshadowcssclosest)
+            executor.executeScript(JavaScriptContent.byshadowcssmatchingregex)
+            executor.executeScript(JavaScriptContent.byshadowcssroot)
+        }
 
         @JvmStatic
         protected fun getExecutor(context: SearchContext): JavascriptExecutor {
